@@ -1,18 +1,34 @@
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox,message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import React, { Component } from 'react'
+import {reqLogin} from '../../ajax/index'
 
 export default class Login extends Component {
    
-    onFinish = (values) => {
-        console.log('Received values of form: ', values);
-      };
+    onFinish =async (values) => {
+     let response=await reqLogin(values.username,values.password)
+     
+     if (response.status===0) { // 登陆成功
+      
+      message.success('登陆成功')
+      this.props.history.push('/')
+
+    } else { // 登陆失败
+      message.error(response.msg)
+    }
+        
+    };
 
 
     render() {
 
         
         return (
+          <div className='login'>
+          <header className='admin-header'>React后台管理</header>
+          <section className='admin-login'>
+          
+          
             <Form
             name="normal_login"
             className="login-form"
@@ -83,6 +99,8 @@ export default class Login extends Component {
 
             
           </Form>
+          </section>
+          </div>
         )
      }
     }

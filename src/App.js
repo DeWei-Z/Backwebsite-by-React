@@ -6,13 +6,13 @@ import Login from './pages/Login/Login';
 
 function App() {
   return (
-    <div >
+   
     <Switch>
       <Route path='/login' component={Login}  />
       <Route path='/' component={Admin}   />
      
     </Switch>
-    </div>
+    
   );
 }
 
