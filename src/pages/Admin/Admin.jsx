@@ -34,8 +34,8 @@ export default class Admin extends Component {
                    <LeftNav></LeftNav>
                </Sider>
                <Layout>
-                  <Header>Header</Header>
-                  <Content style={{backgroundColor:'yellow'}}>
+                  <Header ></Header>
+                  <Content style={{backgroundColor:'#d9d9d9',margin:20}}>
                    <Switch>
                        
                        
@@ -50,7 +50,7 @@ export default class Admin extends Component {
                         <Redirect to='/home' ></Redirect>
                    </Switch>
                   </Content>
-                  <Footer className='footer'>请使用谷歌浏览器</Footer>
+                  <Footer className='footer' style={{backgroundColor:'#ffffff'}}>请使用谷歌浏览器</Footer>
                </Layout>
             </Layout>
            

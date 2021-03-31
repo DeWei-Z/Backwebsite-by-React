@@ -2,6 +2,7 @@ import { Form, Input, Button, Checkbox,message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import React, { Component } from 'react'
 import {reqLogin} from '../../ajax/index'
+import memory from '../../memory'
 
 export default class Login extends Component {
    
@@ -11,6 +12,7 @@ export default class Login extends Component {
      if (response.status===0) { // 登陆成功
       
       message.success('登陆成功')
+      memory.user=values.username
       this.props.history.push('/')
 
     } else { // 登陆失败

@@ -15,23 +15,38 @@ export const reqIP=(data)=>{
            (err, data) => {
             
          if(data.status===0) {
-            console.log('jsonp()', data)
+            
             const {address,point}=data.content
             resolve({address,point})
             
          }else{
             message.error('获取天气信息失败!')
-         }  
-          
+         }           
         })
-
-
-    })
-
-    
-
+    })  
 }
-    
+
+
+export const reqWeather=()=>{
+
+    return new Promise((resolve,reject)=>{
+       
+        jsonp('https://tianqiapi.com/api?version=v6&appid=95472677&appsecret=6UBF3APB',
+               {}, 
+           (err, data) => {
+          
+            resolve(data)
+        })
+    })
+}
+
+export const reqCategorys = (parentId) => ajax('/manage/category/list', {parentId})
+
+
+export const reqAddCategory = (categoryName, parentId) => ajax('/manage/category/add', {categoryName, parentId}, 'POST')
+
+
+export const reqUpdateCategory = ({categoryId, categoryName}) => ajax('/manage/category/update', {categoryId, categoryName}, 'POST')
 
 
 
