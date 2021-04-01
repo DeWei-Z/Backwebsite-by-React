@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
-import { Card,Table,Button } from 'antd';
+import { Card,Table,Button,Modal,Form,Select,Input } from 'antd';
 import { reqCategorys} from '../../ajax/index'
+import { PlusCircleOutlined } from '@ant-design/icons';
 
+const { Option } = Select;
 
 export default class Category extends Component {
 
@@ -35,7 +37,7 @@ export default class Category extends Component {
           parentId: category._id,
           parentName: category.name
         }, () => {
-            console.log('parentName', this.state.parentName) 
+            
           this.getCategorys()
         })
     }
@@ -48,6 +50,16 @@ export default class Category extends Component {
           subCategorys: []
         })
       }
+
+
+
+    addNew=()=>{
+         this.setState({showStatus:1})
+      }
+
+    handleCancel=()=>{
+      this.setState({showStatus:0})
+    }
 
     componentDidMount(){
         this.getCategorys()
@@ -64,7 +76,7 @@ export default class Category extends Component {
               title: '商品分类',
               dataIndex: 'name',
               key: 'name',
-              width:1000,
+              width:'80%',
               
             },
            
@@ -74,9 +86,8 @@ export default class Category extends Component {
                 key: 'x',
                 render: (categorys) => ( 
                     <>
-                      <Button onClick={() => this.showUpdate(categorys)}  style={{marginRight:'20px'}} type="primary" >修改分类</Button>
-                     
-                      {this.state.parentId==='0' ? <Button type="primary" onClick={() => this.showSubCategorys(categorys)}>查看子分类</Button> : null}
+                      {this.state.parentId==='0' ? <Button type="primary" style={{marginRight:'20px'}} onClick={() => this.showSubCategorys(categorys)}>查看子分类</Button> : null}
+                      <Button    type="primary" >修改分类</Button>
                    </>)
               },
           ];
@@ -87,11 +98,27 @@ export default class Category extends Component {
                    <>
                <Button onClick={this.showCategorys} style={{marginRight:400}} type="primary">返回上一级</Button>
                 {this.state.parentName}
-                 </>)} extra={<button>添加分类</button>} style={{height:'100%'}}>
+                 </>)} extra={<Button type="primary" onClick={this.addNew} ><PlusCircleOutlined />添加分类</Button>} style={{height:'100%'}}>
                  
                <Table dataSource={this.state.parentId==='0' ? this.state.categorys : this.state.subCategorys}
                     columns={columns} rowKey='_id' pagination={{pageSize:5}} 
                     loading={this.state.loading}/>;
+
+                  <Modal title="Basic Modal" visible={this.state.showStatus===1} onOk={this.handleOk} onCancel={this.handleCancel}>
+                        <Form.Item >
+                           <Select defaultValue={this.state.parentName}   onChange={this.handleChange}>
+                           <Option value='0'>一级分类</Option>
+                           {
+                                this.state.categorys.map(c => <Option value={c._id}>{c.name}</Option>)
+                           }
+                           
+                            </Select>
+                           
+                        </Form.Item>
+                        <Form.Item>
+                            <Input placeholder="请输入分类名称" />
+                        </Form.Item>
+                  </Modal>
                </Card>
                     
             </div>
