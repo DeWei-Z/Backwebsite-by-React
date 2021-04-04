@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import { Card,Table,Button,Modal,Form,Select,Input } from 'antd';
-import { reqCategorys} from '../../ajax/index'
+import { reqCategorys, reqAddCategory} from '../../ajax/index'
 import { PlusCircleOutlined } from '@ant-design/icons';
+
 
 const { Option } = Select;
 
-export default class Category extends Component {
 
+export default class Category extends Component {
+  formRef = React.createRef();
     state={
         loading:false,
         categorys:[],
@@ -21,7 +23,7 @@ export default class Category extends Component {
 
         this.setState({loading:true})
         const result=await reqCategorys(this.state.parentId)
-        console.log('parentId', this.state.parentId) 
+        
         if(this.state.parentId==='0') {
 
             this.setState({categorys:result.data})
@@ -40,6 +42,7 @@ export default class Category extends Component {
             
           this.getCategorys()
         })
+       
     }
       
     showCategorys = () => {
@@ -58,8 +61,34 @@ export default class Category extends Component {
       }
 
     handleCancel=()=>{
+      this.formRef.current.resetFields()
       this.setState({showStatus:0})
+      this.formRef.current.resetFields()
     }
+
+
+  
+    handleOk=async()=>{
+      const results=this.formRef.current.getFieldsValue()
+      console.log(results)
+      this.formRef.current.resetFields()
+      await reqAddCategory(results.custom,results.parentId)
+      
+       
+        if(results.parentId===this.state.parentId) {
+         
+          this.getCategorys()
+        } else if (results.parentId==='0'){ 
+          this.getCategorys('0')
+        }
+        this.setState({showStatus:0})
+  }
+
+  onFinish=(value)=>{
+    console.log(value)
+  }
+  
+
 
     componentDidMount(){
         this.getCategorys()
@@ -67,11 +96,11 @@ export default class Category extends Component {
     }
 
 
-    render() {
+render() {
 
        
           
-          const columns = [
+  const columns = [
             {
               title: '商品分类',
               dataIndex: 'name',
@@ -86,7 +115,8 @@ export default class Category extends Component {
                 key: 'x',
                 render: (categorys) => ( 
                     <>
-                      {this.state.parentId==='0' ? <Button type="primary" style={{marginRight:'20px'}} onClick={() => this.showSubCategorys(categorys)}>查看子分类</Button> : null}
+                      {this.state.parentId==='0' ? <Button type="primary" style={{marginRight:'20px'}} 
+                       onClick={() => this.showSubCategorys(categorys)}>查看子分类</Button> : null}
                       <Button    type="primary" >修改分类</Button>
                    </>)
               },
@@ -98,26 +128,39 @@ export default class Category extends Component {
                    <>
                <Button onClick={this.showCategorys} style={{marginRight:400}} type="primary">返回上一级</Button>
                 {this.state.parentName}
-                 </>)} extra={<Button type="primary" onClick={this.addNew} ><PlusCircleOutlined />添加分类</Button>} style={{height:'100%'}}>
+                 </>)} extra={<Button type="primary" onClick={this.addNew} ><PlusCircleOutlined />添加分类</Button>}
+                  style={{height:'100%'}}>
                  
-               <Table dataSource={this.state.parentId==='0' ? this.state.categorys : this.state.subCategorys}
+
+
+
+
+
+       <Table dataSource={this.state.parentId==='0' ? this.state.categorys : this.state.subCategorys}
                     columns={columns} rowKey='_id' pagination={{pageSize:5}} 
                     loading={this.state.loading}/>;
 
-                  <Modal title="Basic Modal" visible={this.state.showStatus===1} onOk={this.handleOk} onCancel={this.handleCancel}>
-                        <Form.Item >
-                           <Select defaultValue={this.state.parentName}   onChange={this.handleChange}>
-                           <Option value='0'>一级分类</Option>
+
+
+        <Modal title="添加新分类" visible={this.state.showStatus===1} onOk={()=>this.handleOk} 
+        onCancel={this.handleCancel}  destroyOnClose={true}>
+          <Form ref={this.formRef} name="control-ref" >
+            <Form.Item name='parentId' initialValue={this.state.parentId==='0'?'一级分类':this.state.parentName} >
+             <Select   >
+                           <Option key='0'  value='0'>一级分类</Option>
                            {
-                                this.state.categorys.map(c => <Option value={c._id}>{c.name}</Option>)
+                                this.state.categorys.map(c => <Option key={c._id}  value={c.id}>{c.name}</Option>)
                            }
                            
                             </Select>
                            
+
+
                         </Form.Item>
-                        <Form.Item>
+                        <Form.Item name='custom'>
                             <Input placeholder="请输入分类名称" />
                         </Form.Item>
+            </Form>
                   </Modal>
                </Card>
                     
