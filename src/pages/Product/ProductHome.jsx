@@ -65,8 +65,10 @@ export default class ProductHome extends Component {
             
                <Link to={{pathname:'/product/detail',state:{product}}} >
                    <Button>详情</Button>
-                 </Link> <br/>
+               </Link> <br/>
+               <Link to={{pathname:'/product/addupdate',state:{product}}} >
                 <Button>修改</Button>
+                </Link>
               </>
             )
           }

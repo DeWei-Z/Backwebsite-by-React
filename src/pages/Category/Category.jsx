@@ -20,15 +20,17 @@ export default class Category extends Component {
      
 
     getCategorys=async()=>{
-
+        
         this.setState({loading:true})
         const result=await reqCategorys(this.state.parentId)
-        
+        console.log('更新')
         if(this.state.parentId==='0') {
 
             this.setState({categorys:result.data})
+            console.log('shibai')
           } else {
             this.setState({subCategorys: result.data})
+            console.log('chenggong')
           }
           this.setState({loading:false})
     }
@@ -70,17 +72,17 @@ export default class Category extends Component {
   
     handleOk=async()=>{
       const results=this.formRef.current.getFieldsValue()
-      console.log(results)
+      
       this.formRef.current.resetFields()
       await reqAddCategory(results.custom,results.parentId)
-      
+      console.log(results)
        
         if(results.parentId===this.state.parentId) {
          
           this.getCategorys()
         } else if (results.parentId==='0'){ 
           this.getCategorys('0')
-        }
+        };
         this.setState({showStatus:0})
   }
 
@@ -142,10 +144,10 @@ render() {
 
 
 
-        <Modal title="添加新分类" visible={this.state.showStatus===1} onOk={()=>this.handleOk} 
+        <Modal title="添加新分类" visible={this.state.showStatus===1} onOk={this.handleOk} 
         onCancel={this.handleCancel}  destroyOnClose={true}>
           <Form ref={this.formRef} name="control-ref" >
-            <Form.Item name='parentId' initialValue={this.state.parentId==='0'?'一级分类':this.state.parentName} >
+            <Form.Item name='parentId' initialValue={this.state.parentId==='0'?'一级分类':this.state.parentId} >
              <Select   >
                            <Option key='0'  value='0'>一级分类</Option>
                            {
