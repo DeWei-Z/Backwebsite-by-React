@@ -61,3 +61,9 @@ export const reqCategory = (categoryId) => ajax('/manage/category/info', {catego
 
 
 export const reqUpdateStatus = (productId, status) => ajax('/manage/product/updateStatus', {productId, status}, 'POST')
+
+export const reqDeleteImg = (name) => ajax('/manage/img/delete', {name}, 'POST')
+
+export const reqAddOrUpdateProduct = (product) => ajax('/manage/product/' + ( product._id?'update':'add'), product, 'POST')
+
+export const reqRoles = () => ajax('/manage/role/list')

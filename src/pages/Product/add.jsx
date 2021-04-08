@@ -6,27 +6,45 @@ import {
     Cascader,
     Button,
     InputNumber,
-    Upload
+    message
   } from 'antd'
-import {reqCategorys} from '../../ajax/index'
-import ImgCrop from 'antd-img-crop';
+import {reqCategorys,reqAddOrUpdateProduct} from '../../ajax/index'
+
+import Picture from './picture'
 
 export default class Add extends Component {
 
     state={
         options: [],
-        fileList:[{
-          uid: '-1',
-          name: 'image.png',
-          status: 'done',
-          url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },],
-        loading:false
+       
+       
     }
 
-    onFinish=(values)=>{
+    onFinish=async(values)=>{
      
-    }
+      const {name, desc, price, productCategory} = values
+      const pCategoryId =productCategory[0]
+      const categoryId = productCategory[1]
+      const imgs = this.picNode.getImgs()
+
+      const product = {name, desc, price, imgs,pCategoryId,categoryId}
+
+      if(this.props.location.state){
+        product._id=this.props.location.state.product._id
+      }
+
+      const result = await reqAddOrUpdateProduct(product)
+
+        // 3. 根据结果提示
+        if (result.status===0) {
+          message.success(`${this.props.location.state ? '更新' : '添加'}商品成功!`)
+          this.props.history.goBack()
+        } else {
+          message.error(`${this.props.location.state ? '更新' : '添加'}商品失败!`)
+        }
+      }
+
+    
     
    
 
@@ -78,20 +96,7 @@ export default class Add extends Component {
       }
 
 
-      onPreview = async file => {
-        let src = file.url;
-        if (!src) {
-          src = await new Promise(resolve => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file.originFileObj);
-            reader.onload = () => resolve(reader.result);
-          });
-        }
-        const image = new Image();
-        image.src = src;
-        const imgWindow = window.open(src);
-        imgWindow.document.write(image.outerHTML);
-      };
+     
 
 
       initOptions = async (categorys) => {
@@ -145,7 +150,7 @@ export default class Add extends Component {
                 返回上一级
               </Button>
       
-              <span>添加商品</span>
+              <span>{this.props.location.state?'更新商品':'添加商品'}</span>
             </>
           )
 
@@ -182,23 +187,10 @@ export default class Add extends Component {
         <Form.Item  label="商品描述" name='desc' initialValue={product.desc} >
              <Input.TextArea />
         </Form.Item>
-        <Form.Item  label="商品图片" name='pic'>
-                <ImgCrop rotate>
-              <Upload
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                listType="picture-card"
-                fileList={this.state.fileList}
-                onChange={this.onChange}
-                onPreview={this.onPreview}
-              >
-                {this.state.fileList.length < 5 && '+ Upload'}
-              </Upload>
-            </ImgCrop>
-    </Form.Item>
-
-    <Form.Item>
-          <Button type='primary' htmlType="submit"  style={{marginLeft:'550px'}}>确认</Button>
-    </Form.Item>
+        <Picture  imgs={product.imgs} ref={c=>this.picNode=c} />
+        <Form.Item>
+              <Button type='primary' htmlType="submit"  style={{marginLeft:'550px'}}>确认</Button>
+        </Form.Item>
       </Form>
         </Card>
         )
