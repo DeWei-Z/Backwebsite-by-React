@@ -75,7 +75,7 @@ export default class Category extends Component {
       
       this.formRef.current.resetFields()
       await reqAddCategory(results.custom,results.parentId)
-      console.log(results)
+     
        
         if(results.parentId===this.state.parentId) {
          
