@@ -9,7 +9,9 @@ import {
     message,
     Tree
   } from 'antd'
-import { reqRoles,reqAddRole} from '../../ajax/index'
+import { reqRoles,reqAddRole,reqUpdateRole} from '../../ajax/index'
+import memory from '../../memory'
+
 
 
 
@@ -20,9 +22,17 @@ export default class Role extends Component {
         roles:[],
         role:{},
         showAdd:false,
-        showAU:false
+        showAU:false,
+        menus:[]
+        
     }
 
+    formateDate(time) {
+      if (!time) return ''
+      let date = new Date(time)
+      return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+        + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
+    }
 
     onRow = (role) => {
         return {
@@ -30,7 +40,7 @@ export default class Role extends Component {
             this.setState({
                 role
               })
-           
+        
           },
         }
       }
@@ -69,6 +79,47 @@ export default class Role extends Component {
         }
       }
 
+     
+      onCheck=(Newmenus)=>{
+      
+       this.setState({menus:Newmenus})
+      }
+
+
+      onAuOk=async () => {
+      
+          const role = this.state.role
+         
+          role.menus = this.state.menus
+          role.auth_time = Date.now()
+         
+          role.auth_name =memory.user.role_id
+      
+         
+          const result = await reqUpdateRole(role)
+          if (result.status===0) {
+            
+            if (role._id ===memory.user.role_id) {
+              memory.user = {}
+              this.props.history.replace('/login')
+              message.success('当前用户角色权限成功')
+
+            } else {
+              message.success('设置角色权限成功')
+              this.setState({
+                roles: [...this.state.roles]
+              })
+            }
+      
+          }
+
+          this.setState({
+            showAU: false
+          })
+       
+      }
+
+
     componentDidMount () {
         this.getRoles()
       }
@@ -83,12 +134,12 @@ export default class Role extends Component {
             {
               title: '创建时间',
               dataIndex: 'create_time',
-             
+              render: (create_time) => this.formateDate(create_time)
             },
             {
               title: '授权时间',
               dataIndex: 'auth_time',
-              
+              render: (auth_time) => this.formateDate(auth_time)
             },
             {
               title: '授权人',
@@ -137,7 +188,7 @@ export default class Role extends Component {
         const title = (
             <>
               <Button type='primary' disabled={!this.state.role._id}
-               onClick={()=>{this.setState({showAU:true})}} >设置角色权限</Button>
+               onClick={()=>{this.setState({showAU:true,menus:this.state.role.menus})}} >设置角色权限</Button>
             </>
           )
 
@@ -180,6 +231,8 @@ export default class Role extends Component {
                     checkable
                     defaultExpandAll={true}
                     treeData={treeData}
+                    checkedKeys={this.state.menus}
+                    onCheck={this.onCheck}
     />
               </Modal>
             </Card>

@@ -1,5 +1,5 @@
-let userObj={
+let memory={
     user: {}, 
 }
 
-export default userObj
+export default memory
