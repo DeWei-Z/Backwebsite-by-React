@@ -12,7 +12,8 @@ export default class Login extends Component {
      if (response.status===0) { // 登陆成功
       
       message.success('登陆成功')
-      memory.user=values.username
+      memory.user=response.data
+      console.log(memory.user)
       this.props.history.push('/')
 
     } else { // 登陆失败
@@ -98,8 +99,6 @@ export default class Login extends Component {
               </Button>
               Or <a href="http://www.baidu.com">立即注册</a>
             </Form.Item>
-
-            
           </Form>
           </section>
           </div>

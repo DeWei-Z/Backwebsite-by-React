@@ -3,26 +3,17 @@ import { Layout } from 'antd';
 import {Switch,Route,Redirect} from 'react-router-dom';
 import Header from '../../components/header/header';
 import LeftNav from '../../components/leftNav/leftNav';
-import Home from '../Home/Home';
+import Home from '../Home/index';
 import Category from '../Category/Category';
 import Product from '../Product/Product'
 import Role from '../Role/Role'
 import User from '../User/User'
-import Bar from '../Charts/Bar'
-import Line from '../Charts/Line'
-import Pie from '../Charts/Pie'
+
 
 const { Footer, Sider, Content } = Layout;
 
 
 export default class Admin extends Component {
-
-    
-
-
-    
-            
-      
 
 
     render() {
@@ -35,7 +26,7 @@ export default class Admin extends Component {
                </Sider>
                <Layout>
                   <Header ></Header>
-                  <Content style={{backgroundColor:'#d9d9d9',margin:20}}>
+                  <Content style={{backgroundColor:'#ffffff',margin:20}}>
                    <Switch>
                        
                        
@@ -44,9 +35,6 @@ export default class Admin extends Component {
                         <Route path='/product' component={Product}/>
                         <Route path='/user' component={User}/>
                         <Route path='/role' component={Role}/>
-                        <Route path="/charts/bar" component={Bar}/>
-                        <Route path="/charts/pie" component={Pie}/>
-                        <Route path="/charts/line" component={Line}/>
                         <Redirect to='/home' ></Redirect>
                    </Switch>
                   </Content>

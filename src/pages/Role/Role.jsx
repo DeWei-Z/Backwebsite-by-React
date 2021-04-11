@@ -23,7 +23,8 @@ export default class Role extends Component {
         role:{},
         showAdd:false,
         showAU:false,
-        menus:[]
+        menus:[],
+        loading:false
         
     }
 
@@ -49,8 +50,11 @@ export default class Role extends Component {
         const results=this.formRef.getFieldValue()
        
         this.formRef.resetFields()
+
+        this.setState({loading:true})
         const result = await reqAddRole(results.roleName)
-       
+       this.setState({loading:false})
+
         if (result.status===0) {
           message.success('添加角色成功')
           const role = result.data
@@ -70,7 +74,9 @@ export default class Role extends Component {
 
 
     getRoles = async () => {
+      this.setState({loading:true})
         const result = await reqRoles()
+        this.setState({loading:false})
         if (result.status===0) {
           const roles = result.data
           this.setState({
@@ -93,10 +99,11 @@ export default class Role extends Component {
           role.menus = this.state.menus
           role.auth_time = Date.now()
          
-          role.auth_name =memory.user.role_id
+          role.auth_name =memory.user.username
       
-         
+         this.setState({loading:true})
           const result = await reqUpdateRole(role)
+          this.setState({loading:false})
           if (result.status===0) {
             
             if (role._id ===memory.user.role_id) {
@@ -210,13 +217,14 @@ export default class Role extends Component {
                       }}
                       pagination={{defaultPageSize: 7}}
                       onRow={this.onRow}
+                      loading={this.state.loading}
                     />
 
               <Modal title="创建角色" visible={this.state.showAdd} onOk={this.handleOk} 
                      onCancel={() => {this.setState({showAdd: false})}}  destroyOnClose={true}>
                   <Form ref={c=>this.formRef=c} name="control-ref" >
                         <Form.Item name='roleName'>
-                          <Input placeholder='请输入角色名称'   />
+                          <Input placeholder='请输入角色名称' allowClear={true}  autoComplete="off" />
                         </Form.Item>
                   </Form>
               </Modal>
@@ -225,7 +233,7 @@ export default class Role extends Component {
                      onCancel={() => {this.setState({showAU: false})}}  destroyOnClose={true}>
            
                   
-                    <Input value={this.state.role.name} disabled  />
+                    <Input value={this.state.role.name} disabled />
                  
                   <Tree
                     checkable

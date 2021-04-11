@@ -10,7 +10,6 @@ function App() {
     <Switch>
       <Route path='/login' component={Login}  />
       <Route path='/' component={Admin}   />
-     
     </Switch>
     
   );

@@ -27,10 +27,10 @@ export default class Category extends Component {
         if(this.state.parentId==='0') {
 
             this.setState({categorys:result.data})
-            console.log('shibai')
+            
           } else {
             this.setState({subCategorys: result.data})
-            console.log('chenggong')
+            
           }
           this.setState({loading:false})
     }
@@ -87,7 +87,7 @@ export default class Category extends Component {
   }
 
   onFinish=(value)=>{
-    console.log(value)
+   
   }
   
 
@@ -160,7 +160,7 @@ render() {
 
                         </Form.Item>
                         <Form.Item name='custom'>
-                            <Input placeholder="请输入分类名称" />
+                            <Input placeholder="请输入分类名称"  autoComplete="off" />
                         </Form.Item>
             </Form>
                   </Modal>

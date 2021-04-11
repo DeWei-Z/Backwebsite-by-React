@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Menu } from 'antd';
 import {
-  AppstoreOutlined,
+  
   MacCommandOutlined,
   DesktopOutlined,
   ContainerOutlined,
@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons';
 import './header.less'
 import { Link,withRouter } from 'react-router-dom';
+import memory from '../../memory'
 
 const { SubMenu } = Menu;
  class LeftNav extends Component {
@@ -20,6 +21,9 @@ const { SubMenu } = Menu;
       if(path.indexOf('/product')===0){
         path='/product'
       }
+      const menus=memory.user.role.menus
+      console.log(menus.indexOf("0-0"))
+
 
         return (
             <div>
@@ -29,38 +33,42 @@ const { SubMenu } = Menu;
           defaultOpenKeys={['sub1']}
           mode="inline"
           theme="dark"
-          
+          style={{height:'100%'}}
         >
           <Menu.Item key="/home" icon={<HomeOutlined />}>
             <Link to='/home'>首页</Link>
           </Menu.Item>
-          
+
+       {menus.indexOf("0-0")!==-1?(
           <SubMenu key="sub1" icon={<MacCommandOutlined />} title="商品">
-            <Menu.Item key="/category">
-                <Link to='/category'>品类管理</Link>
-                </Menu.Item>
-            <Menu.Item key="/product">
-                <Link to='/product'>商品管理</Link>
-                </Menu.Item>
-            
-          </SubMenu>
-          <Menu.Item key="/user" icon={<DesktopOutlined />}>
+            {menus.indexOf("/category")!==-1?(
+                   <Menu.Item key="/category">
+                       <Link to='/category'>品类管理</Link>
+                       </Menu.Item>
+                       )
+                       :null}
+
+            {menus.indexOf("/product")!==-1?(
+              <Menu.Item key="/product">
+                  <Link to='/product'>商品管理</Link>
+                  </Menu.Item>
+                  )
+                  :null}
+            </SubMenu>
+       ):null}
+         
+         {menus.indexOf("/user")!==-1?( 
+         <Menu.Item key="/user" icon={<DesktopOutlined />}>
            <Link to='/user'>用户管理</Link> 
-          </Menu.Item>
-          <Menu.Item key="/role" icon={<ContainerOutlined />}>
+          </Menu.Item>):null}
+         
+          {menus.indexOf("/role")!==-1?( 
+           <Menu.Item key="/role" icon={<ContainerOutlined />}>
            <Link to='/role'>角色管理</Link>
-          </Menu.Item>
-          <SubMenu key="sub2" icon={<AppstoreOutlined />} title="图形图表">
-            <Menu.Item key="/charts/bar">
-              <Link to='/charts/bar'>柱形图</Link>
-              </Menu.Item>
-            <Menu.Item key="/charts/line">
-              <Link to='/charts/line'>拆线图</Link>
-              </Menu.Item>
-            <Menu.Item key="/charts/pie">
-              <Link to='/charts/pie'>饼图</Link>
-              </Menu.Item>
-          </SubMenu>
+          </Menu.Item>):null}
+
+        
+          
         </Menu>
             </div>
         )

@@ -103,7 +103,9 @@ export default class ProductHome extends Component {
 
 
       updateStatus = async (productId, status) => {
+        this.setState({loading:true})
         const result = await reqUpdateStatus(productId, status)
+        this.setState({loading:false})
         if(result.status===0) {
           message.success('更新商品成功')
           this.getProducts(this.pageNum)
@@ -160,7 +162,7 @@ export default class ProductHome extends Component {
                             onChange: this.getProducts}}
                         dataSource={this.state.products}
                         columns={this.columns}
-                    
+                        loading={this.state.loading}
                         />
                 </Card>
             

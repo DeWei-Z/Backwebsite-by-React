@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
+import {withRouter} from 'react-router-dom'
 import { reqIP,reqWeather } from '../../ajax'
 import './index.less'
+import { Modal,Button} from 'antd'
+import memory from '../../memory'
 
-export default class Header extends Component {
+class Header extends Component {
     state={
         currentTime:``,
         address:'',
@@ -13,13 +16,24 @@ export default class Header extends Component {
         air:''
     }
    
+
+    logout = () => {
+       
+        Modal.confirm({
+          content: '确定退出吗?',
+          onOk: () => {
+            memory.user = {}
+            this.props.history.replace('/login')
+          }
+        })
+      }
+
+
     getIP = async () => {
         
         const {address} = await reqIP()
         const data=await reqWeather()
        this.setState({address,date:data.date,weather:data.wea,week:data.week,wind:data.win,air:data.air_level})
-       
-       
       }
 
       getTime=()=>{
@@ -46,7 +60,7 @@ export default class Header extends Component {
                 {this.state.weather}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{this.state.wind}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{this.state.air}<br/>
                     {this.state.date}&nbsp;&nbsp;{this.state.week}</p>
                 <div className="header-bottom-right">
-                     <button >退出登录</button><br/>
+                     <Button  onClick={this.logout} type='primary'>退出登录</Button><br/>
                      <span>{this.state.currentTime}</span>
             
             
@@ -55,3 +69,5 @@ export default class Header extends Component {
         )
     }
 }
+
+export default withRouter(Header)

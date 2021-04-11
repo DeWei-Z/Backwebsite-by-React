@@ -173,7 +173,7 @@ export default class Add extends Component {
       >
         
         <Form.Item label="商品名称" name='productName' initialValue={product.name} >
-          <Input />
+          <Input   autoComplete="off" />
         </Form.Item>
        
         <Form.Item label="商品分类" name='productCategory' initialValue={[product.pCategoryId,product.categoryId]||[]}  >
