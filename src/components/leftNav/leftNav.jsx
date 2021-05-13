@@ -22,7 +22,7 @@ const { SubMenu } = Menu;
         path='/product'
       }
       const menus=memory.user.role.menus
-      console.log(menus.indexOf("0-0"))
+    
 
 
         return (
@@ -66,8 +66,6 @@ const { SubMenu } = Menu;
            <Menu.Item key="/role" icon={<ContainerOutlined />}>
            <Link to='/role'>角色管理</Link>
           </Menu.Item>):null}
-
-        
           
         </Menu>
             </div>

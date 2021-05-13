@@ -9,7 +9,7 @@ import {
     message,
     Tree
   } from 'antd'
-import { reqRoles,reqAddRole,reqUpdateRole} from '../../ajax/index'
+import { reqRoles,reqAddRole,reqUpdateRole,reqDeleteRole} from '../../ajax/index'
 import memory from '../../memory'
 
 
@@ -26,6 +26,20 @@ export default class Role extends Component {
         menus:[],
         loading:false
         
+    }
+
+    deleteRole=(role)=>{
+      Modal.confirm({
+        title: `确认删除${role.username}吗?`,
+        onOk: async () => {
+          const result = await reqDeleteRole(role._id)
+          if(result.status===0) {
+            message.success('删除用户成功!')
+            this.getRoles()
+          }
+        }
+      })
+
     }
 
     formateDate(time) {
@@ -48,6 +62,10 @@ export default class Role extends Component {
 
       handleOk=async()=>{
         const results=this.formRef.getFieldValue()
+        if(this.state.roles.find(item=>item.name===results.roleName)){
+          message.error('该角色已存在')
+          return
+        }
        
         this.formRef.resetFields()
 
@@ -67,7 +85,6 @@ export default class Role extends Component {
         } else {
           message.success('添加角色失败')
         }
-
       }
    
      
@@ -83,6 +100,7 @@ export default class Role extends Component {
             roles
           })
         }
+        console.log(this.state.roles)
       }
 
      
@@ -150,8 +168,12 @@ export default class Role extends Component {
             },
             {
               title: '授权人',
-              dataIndex: 'auth_name'
+              dataIndex: 'auth_name',
             },
+            {
+              title: '操作',
+              render: (role) => <Button onClick={() => this.deleteRole(role)} type='primary'>删除</Button>
+            }
           ]
 
 

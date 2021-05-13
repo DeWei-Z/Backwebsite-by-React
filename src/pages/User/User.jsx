@@ -133,10 +133,12 @@ export default class User extends Component {
             roles
           })
         }
+        console.log(this.state.users)
       }
 
       componentDidMount () {
         this.getUsers()
+        
       }
 
     render() {

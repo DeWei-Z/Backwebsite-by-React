@@ -23,6 +23,7 @@ class Header extends Component {
           content: '确定退出吗?',
           onOk: () => {
             memory.user = {}
+            localStorage.removeItem('user')
             this.props.history.replace('/login')
           }
         })
@@ -56,7 +57,7 @@ class Header extends Component {
     render() {
         return (
             <div className='header'>
-                <p>你好，admin，你在{this.state.address}<br/>
+                <p>你好，{memory.user.username}，你在{this.state.address}<br/>
                 {this.state.weather}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{this.state.wind}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{this.state.air}<br/>
                     {this.state.date}&nbsp;&nbsp;{this.state.week}</p>
                 <div className="header-bottom-right">

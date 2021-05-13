@@ -92,14 +92,6 @@ export default class Detail extends Component {
                       }
                       </span>
                     </List.Item>
-
-                    <List.Item>
-                      <span className="left">商品详情:</span>
-                      <span dangerouslySetInnerHTML={{__html: detail}}>
-                      </span>
-                    </List.Item>
-          
-                  
                 </Card>
               )
         

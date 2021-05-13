@@ -8,6 +8,7 @@ import Category from '../Category/Category';
 import Product from '../Product/Product'
 import Role from '../Role/Role'
 import User from '../User/User'
+import memory from '../../memory'
 
 
 const { Footer, Sider, Content } = Layout;
@@ -18,6 +19,12 @@ export default class Admin extends Component {
 
     render() {
         
+        const user = memory.user
+      
+        if(!user) {
+          return <Redirect to='/login'/>
+        }
+
         return (
            
              <Layout className='Layout'>

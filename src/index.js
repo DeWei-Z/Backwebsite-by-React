@@ -2,7 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
 import App from './App';
+import memory from './memory'
 
+
+const user=JSON.parse(localStorage.getItem('user')) 
+memory.user=user
+console.log(memory.user)
 
 ReactDOM.render(
   <BrowserRouter>

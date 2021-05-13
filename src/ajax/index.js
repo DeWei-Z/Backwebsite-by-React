@@ -76,4 +76,6 @@ export const reqUsers = () => ajax('/manage/user/list')
 
 export const reqDeleteUser = (userId) => ajax('/manage/user/delete', {userId}, 'POST')
 
+export const reqDeleteRole = (roleId) => ajax('/manage/role/delete', {roleId}, 'POST')
+
 export const reqAddOrUpdateUser = (user) => ajax('/manage/user/'+(user._id ? 'update' : 'add'), user, 'POST')

@@ -13,6 +13,7 @@ export default class Login extends Component {
       
       message.success('登陆成功')
       memory.user=response.data
+      localStorage.setItem('user',JSON.stringify(response.data))
       console.log(memory.user)
       this.props.history.push('/')
 
